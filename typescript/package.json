@@ -1,0 +1,38 @@
+{
+  "name": "lombokprivacy",
+  "version": "0.1.0",
+  "description": "Local differential privacy and data-minimization helpers: seeded PCG32, randomized response, generalized randomized response, estimators, and IP, domain and email masking. Part of the Lombok Ecosystem.",
+  "license": "Apache-2.0 OR MIT",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit",
+    "test": "node --test test/"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.0",
+    "@types/node": "^22.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/codinglombok/LombokPrivacy.git"
+  },
+  "keywords": [
+    "lombok-ecosystem"
+  ],
+  "engines": {
+    "node": ">=22"
+  }
+}
