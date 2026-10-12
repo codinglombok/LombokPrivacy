@@ -1,30 +1,30 @@
-# Struktur Repo LombokPrivacy
+# Repository Structure LombokPrivacy
 
-## 1. Struktur folder
+## 1. Folder structure
 
 ```
 LombokPrivacy/
   README.md  CHANGELOG.md  LICENSE-APACHE  LICENSE-MIT  version.txt  .gitignore
-  docs/        dokumen standar (masterplan_ dan architecture_ internal, tidak di-commit)
-  vectors/     lombokprivacy-vectors-v1.json  kontrak lintas bahasa
+  docs/        standard documents (masterplan_ and architecture_ are internal, not committed)
+  vectors/     lombokprivacy-vectors-v1.json  cross-language contract
   typescript/  package.json  tsconfig*.json  src/index.ts  test/vectors.test.ts
   python/      pyproject.toml  src/lombokprivacy/__init__.py  tests/test_vectors.py
-  scripts/     gen_vectors.ts  membangkitkan vector dari referensi TypeScript
+  scripts/     gen_vectors.ts  generates vectors from the TypeScript reference
   examples/    example.ts  example.py  OUTPUT.txt
 ```
 
-## 2. Konvensi penamaan
+## 2. Naming conventions
 
-Repo `LombokPrivacy`; paket npm/PyPI `lombokprivacy`; dokumen `<jenis>_LombokPrivacy_v<semver>.md`.
+Repository `LombokPrivacy`; npm/PyPI package `lombokprivacy`; documents `<type>_LombokPrivacy_v<semver>.md`.
 
-## 3. Berkas wajib di root
+## 3. Required root files
 
 README.md, CHANGELOG.md, LICENSE-APACHE, LICENSE-MIT, version.txt, .gitignore (ADR-024).
 
-## 4. Struktur per port
+## 4. Structure per port
 
-TypeScript: satu modul `src/index.ts`, tanpa dependensi runtime. Python: satu paket `src/lombokprivacy`, tanpa dependensi.
+TypeScript: a single module `src/index.ts` with no runtime dependencies. Python: a single package `src/lombokprivacy` with no dependencies.
 
-## 5. Catatan
+## 5. Notes
 
-Port Rust, Go, PHP belum ada; foldernya baru dibuat saat port memiliki runner vector (GP-11).
+The Rust, Go and PHP ports do not exist yet; their folders are created only once a port has a vector runner (GP-11).

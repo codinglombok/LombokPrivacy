@@ -1,16 +1,16 @@
-# Panduan Pemakaian LombokPrivacy
+# Usage Guide LombokPrivacy
 
-## 1. Instalasi
+## 1. Installation
 
-Setelah rilis: `npm install lombokprivacy` atau `pip install lombokprivacy`. Sebelum rilis, salin folder `typescript/src` atau `python/src/lombokprivacy` (tanpa dependensi).
+After release: `npm install lombokprivacy` or `pip install lombokprivacy`. Before release, copy the `typescript/src` folder or `python/src/lombokprivacy` (no dependencies).
 
-## 2. Konsep dasar
+## 2. Basic concepts
 
-Pcg32 menghasilkan angka acak deterministik dari seed. randomizedResponse dan grr mengacak jawaban sebelum disimpan; estimateBinary dan estimateGrr memulihkan proporsi sebenarnya dari banyak jawaban teracak. maskIp, maskDomain, maskEmail memotong data pribadi sebelum disimpan.
+Pcg32 produces deterministic random numbers from a seed. randomizedResponse and grr randomize an answer before it is stored; estimateBinary and estimateGrr recover the true proportion from many randomized answers. maskIp, maskDomain, and maskEmail truncate personal data before it is stored.
 
-## 3. Contoh
+## 3. Examples
 
-Berkas `examples/example.ts` dan `examples/example.py` menghasilkan keluaran berikut (TypeScript; Python sama kecuali format cetak):
+`examples/example.ts` and `examples/example.py` produce the following output (TypeScript; Python is identical except for print formatting):
 
 ```
 observed 3373 estimated rate 0.297
@@ -18,7 +18,7 @@ observed 3373 estimated rate 0.297
 *.example.com u***@example.com
 ```
 
-Kode TypeScript:
+TypeScript code:
 
 ```ts
 import { Pcg32, estimateBinary, maskDomain, maskEmail, maskIp, randomizedResponse } from "lombokprivacy";
@@ -34,17 +34,17 @@ console.log(maskDomain("a.b.example.com"), maskEmail("user@Example.com"));
 
 ## 4. Recipes
 
-- Telemetri ya/tidak: terapkan randomizedResponse di sisi klien, kumpulkan jumlah, taksir dengan estimateBinary.
-- Log akses: simpan maskIp(ip) alih-alih alamat penuh.
-- Pelaporan epsilon: tulis epsilonBinary(p) di kebijakan privasi.
+- Yes/no telemetry: apply randomizedResponse on the client, collect the count, estimate with estimateBinary.
+- Access logs: store maskIp(ip) instead of the full address.
+- Epsilon reporting: state epsilonBinary(p) in the privacy policy.
 
 ## 5. Common pitfalls
 
-- Pcg32 bukan CSPRNG; untuk privasi nyata sumber acak harus tidak dapat diprediksi, library ini sengaja deterministik untuk reproduksibilitas.
-- Hanya randomized response; tidak ada mekanisme Laplace/Gauss maupun penghitung anggaran epsilon.
-- Jaminan privasi bergantung pada pemakaian benar (satu jawaban per responden per pertanyaan).
-- Port Rust, Go, PHP BELUM.
+- Pcg32 is not a CSPRNG; for real privacy the randomness source must be unpredictable. This library is deliberately deterministic for reproducibility.
+- Only randomized response is implemented; there are no Laplace/Gaussian mechanisms or epsilon budget counters.
+- The privacy guarantee depends on correct use (one answer per respondent per question).
+- Rust, Go and PHP ports: NOT YET.
 
-## 6. Lihat juga
+## 6. See also
 
 `SPEC_LombokPrivacy_v0.1.0.md`, `API_LombokPrivacy_v0.1.0.md`, `full_summary_project_LombokPrivacy_v0.1.0.md`.

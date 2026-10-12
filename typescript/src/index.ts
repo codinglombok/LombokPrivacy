@@ -1,7 +1,7 @@
 const M64 = (1n << 64n) - 1n;
 const MULT = 6364136223846793005n;
 
-/** PCG-XSH-RR 64/32, deterministik; bukan untuk kriptografi. */
+/** PCG-XSH-RR 64/32. Deterministic; not for cryptography. */
 export class Pcg32 {
   private state = 0n;
   private inc: bigint;
@@ -19,11 +19,11 @@ export class Pcg32 {
     const rot = Number(old >> 59n);
     return ((xs >>> rot) | (xs << (-rot & 31))) >>> 0;
   }
-  /** [0, 1) dengan resolusi 2^-32 */
+  /** Float in [0, 1) with 2^-32 resolution. */
   nextFloat(): number {
     return this.nextU32() / 4294967296;
   }
-  /** bilangan bulat seragam dalam [0, n), 1 <= n <= 2^32, tanpa bias (rejection) */
+  /** Uniform integer in [0, n), 1 <= n <= 2^32, unbiased (rejection sampling). */
   nextBounded(n: number): number {
     if (!Number.isInteger(n) || n < 1 || n > 4294967296) throw new RangeError("n");
     const threshold = (4294967296 - n) % n;
@@ -38,13 +38,13 @@ function checkP(p: number, lo: number): void {
   if (!(p >= lo && p <= 1)) throw new RangeError("p out of range");
 }
 
-/** Randomized response biner: jujur dengan peluang p (0.5 <= p <= 1). */
+/** Binary randomized response: answers truthfully with probability p (0.5 <= p <= 1). */
 export function randomizedResponse(bit: boolean, p: number, rng: Pcg32): boolean {
   checkP(p, 0.5);
   return rng.nextFloat() < p ? bit : !bit;
 }
 
-/** Generalized randomized response untuk nilai 0..k-1. */
+/** Generalized randomized response for values 0..k-1. */
 export function grr(value: number, k: number, p: number, rng: Pcg32): number {
   if (!Number.isInteger(k) || k < 2 || k > 4294967296) throw new RangeError("k");
   if (!Number.isInteger(value) || value < 0 || value >= k) throw new RangeError("value");
@@ -54,24 +54,24 @@ export function grr(value: number, k: number, p: number, rng: Pcg32): number {
   return r >= value ? r + 1 : r;
 }
 
-/** epsilon untuk randomized response biner: ln(p / (1 - p)); Infinity bila p = 1. */
+/** Epsilon of binary randomized response: ln(p / (1 - p)); Infinity when p = 1. */
 export function epsilonBinary(p: number): number {
   checkP(p, 0.5);
   return p === 1 ? Infinity : Math.log(p / (1 - p));
 }
-/** epsilon untuk GRR: ln(p (k - 1) / (1 - p)). */
+/** Epsilon of GRR: ln(p (k - 1) / (1 - p)). */
 export function epsilonGrr(p: number, k: number): number {
   if (!Number.isInteger(k) || k < 2) throw new RangeError("k");
   checkP(p, 1 / k);
   return p === 1 ? Infinity : Math.log((p * (k - 1)) / (1 - p));
 }
 
-/** Estimasi tak bias jumlah "benar" sebenarnya dari c jawaban teracak dari n responden (p > 0.5). */
+/** Unbiased estimate of the true proportion of "yes" from c randomized answers out of n respondents (p > 0.5). */
 export function estimateBinary(c: number, n: number, p: number): number {
   if (!(p > 0.5 && p <= 1) || !(n > 0)) throw new RangeError("args");
   return (c - n * (1 - p)) / (n * (2 * p - 1));
 }
-/** Estimasi tak bias proporsi nilai tertentu dari GRR. */
+/** Unbiased estimate of the proportion of one value from GRR answers. */
 export function estimateGrr(c: number, n: number, p: number, k: number): number {
   if (!Number.isInteger(k) || k < 2 || !(n > 0)) throw new RangeError("args");
   const q = (1 - p) / (k - 1);
@@ -82,7 +82,7 @@ export function estimateGrr(c: number, n: number, p: number, k: number): number 
 const V4 = /^(0|[1-9][0-9]{0,2})\.(0|[1-9][0-9]{0,2})\.(0|[1-9][0-9]{0,2})\.(0|[1-9][0-9]{0,2})$/;
 const HEX = /^[0-9a-fA-F]{1,4}$/;
 
-/** Potong alamat IP ke prefix; IPv4 titik-desimal, IPv6 diekspansi 8 grup tanpa kompresi. null bila tidak sah. */
+/** Truncate an IP address to a prefix; IPv4 dotted decimal, IPv6 expanded to 8 groups without compression. Returns null if invalid. */
 export function maskIp(ip: string, v4Prefix = 24, v6Prefix = 48): string | null {
   if (!Number.isInteger(v4Prefix) || v4Prefix < 0 || v4Prefix > 32) throw new RangeError("v4Prefix");
   if (!Number.isInteger(v6Prefix) || v6Prefix < 0 || v6Prefix > 128) throw new RangeError("v6Prefix");
@@ -126,7 +126,7 @@ export function maskIp(ip: string, v4Prefix = 24, v6Prefix = 48): string | null 
 
 const fold = (s: string): string => s.replace(/[A-Z]/g, (c) => String.fromCharCode(c.charCodeAt(0) + 32));
 
-/** Pertahankan `keep` label paling kanan; label lain diganti satu "*". null bila bentuk tidak sah. */
+/** Keep the rightmost `keep` labels; the remaining labels are replaced by a single "*". Returns null if malformed. */
 export function maskDomain(host: string, keep = 2): string | null {
   if (!Number.isInteger(keep) || keep < 1) throw new RangeError("keep");
   let h = fold(host);
@@ -137,7 +137,7 @@ export function maskDomain(host: string, keep = 2): string | null {
   return labels.length > keep ? "*." + labels.slice(-keep).join(".") : h;
 }
 
-/** "user@Example.com" -> "u***@example.com". null bila bukan tepat satu '@' dengan dua sisi tidak kosong. */
+/** "user@Example.com" -> "u***@example.com". Returns null unless there is exactly one '@' with non-empty sides. */
 export function maskEmail(addr: string): string | null {
   const parts = addr.split("@");
   if (parts.length !== 2 || parts[0] === "" || parts[1] === "") return null;

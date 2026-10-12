@@ -1,42 +1,42 @@
-# Ringkasan Proyek LombokPrivacy
+# Project Summary LombokPrivacy
 
-## Apa ini
+## What it is
 
 Local differential privacy and data-minimization helpers: seeded PCG32, randomized response, generalized randomized response, estimators, and IP, domain and email masking. Part of the Lombok Ecosystem.
 
-## Mengapa dibuat
+## Why it exists
 
-Mengumpulkan statistik tanpa menyimpan jawaban asli, dan menyimpan log tanpa data pribadi lengkap, membutuhkan alat yang sederhana dan dapat diaudit. Library ini menyediakan randomized response yang dapat direproduksi dan fungsi penyamaran yang hasilnya identik di setiap bahasa.
+Collecting statistics without storing the true answers, and keeping logs without full personal data, needs simple and auditable tools. This library provides reproducible randomized response and masking functions whose results are identical in every language.
 
-## Fitur utama
+## Main features
 
-- PCG-XSH-RR 64/32 deterministik (cocok dengan nilai referensi PCG)
-- Randomized response biner dan GRR untuk k nilai
-- Epsilon dan penaksir tak bias
-- maskIp (IPv4/IPv6 ke prefix), maskDomain, maskEmail
+- Deterministic PCG-XSH-RR 64/32 (matches the PCG reference values)
+- Binary randomized response and GRR for k values
+- Epsilon and unbiased estimators
+- maskIp (IPv4/IPv6 to a prefix), maskDomain, maskEmail
 
-## Status saat ini
+## Current status
 
-Versi 0.1.0, belum dirilis. TypeScript dan Python lulus 690 kasus vector. Port lain belum ada.
+Version 0.1.0, not yet released. TypeScript and Python pass 690 vector cases. No other ports exist.
 
-## Contoh pemakai
+## Example use cases
 
-- Telemetri aplikasi yang mengumpulkan jawaban ya/tidak tanpa menyimpan jawaban asli
-- Log akses atau log kueri yang perlu dipotong sebelum disimpan
-- Survei dengan perlindungan responden
-- Perangkat tertanam yang melaporkan metrik dengan privasi lokal
+- Application telemetry that collects yes/no answers without storing the true answer
+- Access or query logs that must be truncated before storage
+- Surveys with respondent protection
+- Embedded devices reporting metrics with local privacy
 
-## Batasan yang Diketahui
+## Known Limitations
 
-- Pcg32 bukan CSPRNG; untuk privasi nyata sumber acak harus tidak dapat diprediksi, library ini sengaja deterministik untuk reproduksibilitas.
-- Hanya randomized response; tidak ada mekanisme Laplace/Gauss maupun penghitung anggaran epsilon.
-- Jaminan privasi bergantung pada pemakaian benar (satu jawaban per responden per pertanyaan).
-- Port Rust, Go, PHP BELUM.
+- Pcg32 is not a CSPRNG; for real privacy the randomness source must be unpredictable. This library is deliberately deterministic for reproducibility.
+- Only randomized response is implemented; there are no Laplace/Gaussian mechanisms or epsilon budget counters.
+- The privacy guarantee depends on correct use (one answer per respondent per question).
+- Rust, Go and PHP ports: NOT YET.
 
-## Info lanjut
+## Further information
 
-SPEC: `SPEC_LombokPrivacy_v0.1.0.md`; API: `API_LombokPrivacy_v0.1.0.md`; panduan: `guide_how_to_use_LombokPrivacy_v0.1.0.md`.
+SPEC: `SPEC_LombokPrivacy_v0.1.0.md`; API: `API_LombokPrivacy_v0.1.0.md`; guide: `guide_how_to_use_LombokPrivacy_v0.1.0.md`.
 
-## Gap vs pembanding
+## Gap versus comparable libraries
 
-Pembanding: OpenDP, Google differential-privacy, diffprivlib. Gap jujur: cakupan jauh lebih sempit; keunggulan: ukuran kecil, tanpa dependensi, hasil identik lintas bahasa.
+Comparable: OpenDP, Google differential-privacy, diffprivlib. Honest gap: a much narrower scope; strengths: small size, no dependencies, identical results across languages.
